@@ -1,0 +1,13 @@
+<div class="modal fade" role="dialog" aria-modal="true" attr.aria-label="{{ 'settings' | i18n }}">
+  <div class="modal-dialog" role="document">
+    <form class="modal-content" (ngSubmit)="submit()">
+      <div class="modal-body">body</div>
+      <div class="modal-footer">
+        <button type="submit" class="primary" appA11yTitle="{{ 'save' | i18n }}">
+          <i class="bwi bwi-save-changes bwi-lg bwi-fw" aria-hidden="true"></i>
+        </button>
+        <button type="button" data-dismiss="modal">{{ "cancel" | i18n }}</button>
+      </div>
+    </form>
+  </div>
+</div>
