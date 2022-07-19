@@ -75,8 +75,7 @@ export class ModalService {
       return;
     }
 
-    // eslint-disable-next-line
-    const [modalRef, _] = this.openInternal(componentType, config, true);
+    const [modalRef] = this.openInternal(componentType, config, true);
 
     return modalRef;
   }
