@@ -1393,6 +1393,12 @@
   "lockWithMasterPassOnRestart": {
     "message": "Lock with master password on restart"
   },
+  "deleteAccount": {
+    "message": "Delete account"
+  },
+  "deleteAccountDesc": {
+    "message": "Deleting your account is permanent. It cannot be undone."
+  },
   "preferences": {
     "message": "Preferences"
   },
