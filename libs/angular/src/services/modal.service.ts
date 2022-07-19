@@ -17,7 +17,8 @@ import { ModalRef } from "../components/modal/modal.ref";
 
 export class ModalConfig<D = any> {
   data?: D;
-  allowMultipleModals = false;
+  allowMultipleModals?: boolean;
+  replaceTopModal?: boolean;
 }
 
 @Injectable()
@@ -63,8 +64,14 @@ export class ModalService {
     return [modalRef, modalComponentRef.instance.componentRef.instance];
   }
 
-  open(componentType: Type<any>, config?: ModalConfig) {
-    if (!(config?.allowMultipleModals ?? false) && this.modalCount > 0) {
+  open(componentType: Type<any>, config: ModalConfig = {}) {
+    const { replaceTopModal: replaceCurrent = false, allowMultipleModals = false } = config;
+
+    if (this.modalCount > 0 && replaceCurrent) {
+      this.topModal.instance.close();
+    }
+
+    if (this.modalCount > 0 && !allowMultipleModals) {
       return;
     }
 

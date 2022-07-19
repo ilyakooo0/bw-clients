@@ -441,6 +441,6 @@ export class SettingsComponent implements OnInit {
   }
 
   async openDeleteAccount() {
-    this.modalService.open(DeleteAccountComponent, { allowMultipleModals: true });
+    this.modalService.open(DeleteAccountComponent, { replaceTopModal: true });
   }
 }
