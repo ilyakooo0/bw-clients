@@ -16,6 +16,16 @@ export class StateService
   extends BaseStateService<GlobalState, Account>
   implements StateServiceAbstraction
 {
+  async getFromSessionMemory<T>(key: string): Promise<T> {
+    // TODO MDG: get from session storage
+    throw Error("todo");
+  }
+
+  async setInSessionMemory(key: string, value: any): Promise<void> {
+    // TODO MDG: update session storage
+    throw Error("todo");
+  }
+
   async addAccount(account: Account) {
     // Apply browser overrides to default account values
     account = new Account(account);

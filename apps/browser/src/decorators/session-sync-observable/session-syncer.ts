@@ -1,26 +1,61 @@
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 
-import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { Utils } from "@bitwarden/common/misc/utils";
+
+import { StateService } from "src/services/abstractions/state.service";
+
+import { SyncedItemMetadata } from "./sync-item-metadata";
 
 export class SessionSyncer {
-  constructor(private observedObject: any, private stateService: StateService) {
+  subscription: Subscription;
+  id = Utils.newGuid();
+
+  constructor(
+    private observedObject: any,
+    private stateService: StateService,
+    private messagingService: MessagingService,
+    private metaData: SyncedItemMetadata
+  ) {
     if (!(observedObject instanceof Observable)) {
       throw new Error("observedObject must be an instance of Observable");
     }
+
+    if (metaData.ctor == null && metaData.initializer == null) {
+      throw new Error("ctor or initializer must be provided");
+    }
+
     this.observe(observedObject);
+    this.listen_for_updates(observedObject);
   }
 
   observe(observable: Observable<any>) {
-    return;
-
-    // // TODO MDG: message-based observing
-
-    // this.observedObject;
-    // val.subscribe((next) => {
-    //   this.updateSession(key, next);
-    // });
+    this.subscription = observable.subscribe(async (next) => {
+      await this.updateSession(this.metaData.key, next);
+    });
   }
-  updateSession(key: string, value: any) {
-    // TODO MDG: update session storage
+
+  listen_for_updates(observable: Observable<any>) {
+    // TODO MDG: message-based observing
+  }
+
+  async updateSession(key: string, value: any) {
+    await this.stateService.setInSessionMemory(key, value);
+    await this.messagingService.send(this.update_message, { id: this.id });
+    // TODO MDG: send update message
+  }
+
+  build_from_key_value_pair(key_value_pair: any) {
+    if (this.metaData.initializer != null) {
+      return this.metaData.initializer(key_value_pair);
+    }
+    return Object.create(
+      this.metaData.ctor.prototype,
+      Object.getOwnPropertyDescriptors(key_value_pair)
+    );
+  }
+
+  private get update_message() {
+    return `${this.metaData.key}_update`;
   }
 }

@@ -18,9 +18,6 @@ class BuildOptions<T> {
  * @returns decorator function
  */
 export function sessionSync<T>(buildOptions: BuildOptions<T>) {
-  if (buildOptions.ctor == null && buildOptions.initializer == null) {
-    throw new Error("Either constructor or initializer must be provided");
-  }
   return (prototype: unknown, propertyKey: string) => {
     const p = prototype as SessionStorable;
 

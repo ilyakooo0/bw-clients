@@ -1,13 +1,13 @@
-import { Observable } from "rxjs";
+import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 
-import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { StateService } from "../../services/abstractions/state.service";
 
 import { SessionStorable } from "./session-storable";
 import { SessionSyncer } from "./session-syncer";
 import { SyncedItemMetadata } from "./sync-item-metadata";
 
 /**
- * Mark the class as syning state across the browser session. This decorator finds {@link Observable} properties
+ * Mark the class as syning state across the browser session. This decorator finds rxjs Observable properties
  * marked with @sessionSync and syncs these values across the browser session.
  *
  * @param constructor
@@ -23,8 +23,9 @@ export function browserSession<TCtor extends { new (...args: any[]): any }>(cons
 
       // Require state service to be injected
       const stateService = args.find((arg) => arg instanceof StateService);
-      if (!stateService) {
-        throw new Error("StateService must be injected");
+      const messagingService = args.find((arg) => arg instanceof MessagingService);
+      if (!stateService || !messagingService) {
+        throw new Error("StateService and MessagingService must be injected");
       }
 
       if (this.__syncedItemMetadata == null || !(this.__syncedItemMetadata instanceof Array)) {
@@ -32,16 +33,13 @@ export function browserSession<TCtor extends { new (...args: any[]): any }>(cons
       }
 
       this.__sessionSyncers = this.__syncedItemMetadata.map(
-        (metadata) => new SessionSyncer(this.get_observable_from_key(metadata.key), stateService)
+        (metadata) =>
+          new SessionSyncer((this as any)[metadata.key], stateService, messagingService, {
+            key: `${constructor.name}_` + metadata.key,
+            ctor: metadata.ctor,
+            initializer: metadata.initializer,
+          })
       );
-    }
-
-    get_observable_from_key(key: string): Observable<any> {
-      const val = (this as any)[key];
-      if (!(val instanceof Observable)) {
-        throw new Error(`${key} is not an observable`);
-      }
-      return val;
     }
   };
 }
