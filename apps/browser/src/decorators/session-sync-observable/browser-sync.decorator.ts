@@ -7,7 +7,7 @@ import { SessionSyncer } from "./session-syncer";
 import { SyncedItemMetadata } from "./sync-item-metadata";
 
 /**
- * Mark the class as syncing state across the browser session. This decorator finds rxjs Observable properties
+ * Mark the class as syncing state across the browser session. This decorator finds rxjs BehaviorSubject properties
  * marked with @sessionSync and syncs these values across the browser session.
  *
  * @param constructor

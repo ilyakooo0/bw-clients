@@ -1,4 +1,4 @@
-import { Observable } from "rxjs";
+import { BehaviorSubject } from "rxjs";
 
 import { sessionSync } from "./session-sync.decorator";
 
@@ -7,7 +7,7 @@ describe("sessionSync decorator", () => {
   const ctor = String;
   class TestClass {
     @sessionSync({ ctor: ctor, initializer: initializer })
-    testProperty = new Observable<string>();
+    testProperty = new BehaviorSubject("");
   }
 
   it("should add __syncedItemKeys to prototype", () => {

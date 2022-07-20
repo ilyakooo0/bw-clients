@@ -8,13 +8,12 @@ class BuildOptions<T> {
 }
 
 /**
- * A decorator used to indicate the Observable should be synced for this browser session across all contexts.
+ * A decorator used to indicate the BehaviorSubject should be synced for this browser session across all contexts.
  * **Note** This decorator does nothing if the enclosing class is not decorated with @browserSession.
- * >**WARNING synced observable values are synced as key-value pairs, not full objects!**
  * @param buildOptions
- * Builders for the value, requires either a constructor (ctor) for your observable type or an
- * initializer function that takes a key value pair representation of the observable data
- * and returns your observable type.
+ * Builders for the value, requires either a constructor (ctor) for your BehaviorSubject type or an
+ * initializer function that takes a key value pair representation of the BehaviorSubject data
+ * and returns your BehaviorSubject data type.
  * @returns decorator function
  */
 export function sessionSync<T>(buildOptions: BuildOptions<T>) {
