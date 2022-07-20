@@ -1,26 +1,27 @@
 // Add chrome storage api
-const get = jest.fn();
-const set = jest.fn();
-const has = jest.fn();
-const remove = jest.fn();
+const fn = jest.fn();
 const QUOTA_BYTES = 10;
-const getBytesInUse = jest.fn();
-const clear = jest.fn();
 global.chrome = {
   storage: {
     local: {
-      set,
-      get,
-      remove,
+      set: fn,
+      get: fn,
+      remove: fn,
       QUOTA_BYTES,
-      getBytesInUse,
-      clear,
+      getBytesInUse: fn,
+      clear: fn,
     },
     session: {
-      set,
-      get,
-      has,
-      remove,
+      set: fn,
+      get: fn,
+      has: fn,
+      remove: fn,
     },
+  },
+  runtime: {
+    onMessage: {
+      addListener: fn,
+    },
+    sendMessage: fn,
   },
 } as any;

@@ -1,9 +1,9 @@
 import { Observable, Subscription } from "rxjs";
 
-import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { Utils } from "@bitwarden/common/misc/utils";
 
-import { StateService } from "src/services/abstractions/state.service";
+import { BrowserApi } from "../../browser/browserApi";
+import { StateService } from "../../services/abstractions/state.service";
 
 import { SyncedItemMetadata } from "./sync-item-metadata";
 
@@ -14,7 +14,6 @@ export class SessionSyncer {
   constructor(
     private observedObject: any,
     private stateService: StateService,
-    private messagingService: MessagingService,
     private metaData: SyncedItemMetadata
   ) {
     if (!(observedObject instanceof Observable)) {
@@ -41,8 +40,7 @@ export class SessionSyncer {
 
   async updateSession(key: string, value: any) {
     await this.stateService.setInSessionMemory(key, value);
-    await this.messagingService.send(this.update_message, { id: this.id });
-    // TODO MDG: send update message
+    await BrowserApi.sendMessage(this.update_message, { id: this.id });
   }
 
   build_from_key_value_pair(key_value_pair: any) {

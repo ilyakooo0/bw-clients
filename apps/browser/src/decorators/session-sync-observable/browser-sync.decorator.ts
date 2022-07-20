@@ -1,5 +1,3 @@
-import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-
 import { StateService } from "../../services/abstractions/state.service";
 
 import { SessionStorable } from "./session-storable";
@@ -23,10 +21,9 @@ export function browserSession<TCtor extends { new (...args: any[]): any }>(cons
 
       // Require state service to be injected
       const stateService = args.find((arg) => arg instanceof StateService);
-      const messagingService = args.find((arg) => arg instanceof MessagingService);
-      if (!stateService || !messagingService) {
+      if (!stateService) {
         throw new Error(
-          `Cannot decorate ${constructor.name} with browserSession, StateService and MessagingService must be injected`
+          `Cannot decorate ${constructor.name} with browserSession, StateService must be injected`
         );
       }
 
@@ -36,7 +33,7 @@ export function browserSession<TCtor extends { new (...args: any[]): any }>(cons
 
       this.__sessionSyncers = this.__syncedItemMetadata.map(
         (metadata) =>
-          new SessionSyncer((this as any)[metadata.key], stateService, messagingService, {
+          new SessionSyncer((this as any)[metadata.key], stateService, {
             key: `${constructor.name}_` + metadata.key,
             ctor: metadata.ctor,
             initializer: metadata.initializer,
