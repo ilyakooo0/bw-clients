@@ -1,7 +1,47 @@
 <div class="modal fade" role="dialog" aria-modal="true" attr.aria-label="{{ 'settings' | i18n }}">
   <div class="modal-dialog" role="document">
     <form class="modal-content" (ngSubmit)="submit()">
-      <div class="modal-body">body</div>
+      <div class="modal-body">
+        <div class="modal-title">{{ "deleteAccount" | i18n }}</div>
+        <div class="modal-text">Proceed below to delete your account and all vault data.</div>
+        <app-callout type="warning" title="{{ 'warning' | i18n }}">
+          Deleting your account is permanent. It cannot be undone.
+        </app-callout>
+        <div class="box last">
+          <div class="box-content">
+            <div class="box-content-row box-content-row-flex" appBoxRow>
+              <div class="row-main">
+                <label for="masterPassword">{{ "masterPass" | i18n }}</label>
+                <input
+                  id="masterPassword"
+                  type="{{ showPassword ? 'text' : 'password' }}"
+                  name="MasterPassword"
+                  class="monospaced"
+                  [(ngModel)]="masterPassword"
+                  required
+                  appInputVerbatim
+                />
+              </div>
+              <div class="action-buttons">
+                <button
+                  type="button"
+                  class="row-btn"
+                  appStopClick
+                  appA11yTitle="{{ 'toggleVisibility' | i18n }}"
+                  [attr.aria-pressed]="showPassword"
+                  (click)="togglePassword()"
+                >
+                  <i
+                    class="bwi bwi-lg"
+                    aria-hidden="true"
+                    [ngClass]="{ 'bwi-eye': !showPassword, 'bwi-eye-slash': showPassword }"
+                  ></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="modal-footer">
         <button type="submit" class="primary" appA11yTitle="{{ 'save' | i18n }}">
           <i class="bwi bwi-save-changes bwi-lg bwi-fw" aria-hidden="true"></i>
