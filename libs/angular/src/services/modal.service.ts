@@ -65,9 +65,9 @@ export class ModalService {
   }
 
   open(componentType: Type<any>, config: ModalConfig = {}) {
-    const { replaceTopModal: replaceCurrent = false, allowMultipleModals = false } = config;
+    const { replaceTopModal = false, allowMultipleModals = false } = config;
 
-    if (this.modalCount > 0 && replaceCurrent) {
+    if (this.modalCount > 0 && replaceTopModal) {
       this.topModal.instance.close();
     }
 
@@ -93,6 +93,10 @@ export class ModalService {
     }
 
     return this.componentFactoryResolver.resolveComponentFactory(componentType);
+  }
+
+  closeAll(): void {
+    this.modalList.forEach((modal) => modal.instance.close());
   }
 
   protected openInternal(
