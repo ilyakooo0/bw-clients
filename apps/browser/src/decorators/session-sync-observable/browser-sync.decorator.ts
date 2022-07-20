@@ -31,14 +31,19 @@ export function browserSession<TCtor extends { new (...args: any[]): any }>(cons
         return;
       }
 
-      this.__sessionSyncers = this.__syncedItemMetadata.map(
-        (metadata) =>
-          new SessionSyncer((this as any)[metadata.key], stateService, {
-            key: `${constructor.name}_` + metadata.key,
-            ctor: metadata.ctor,
-            initializer: metadata.initializer,
-          })
+      this.__sessionSyncers = this.__syncedItemMetadata.map((metadata) =>
+        this.buildSyncer(metadata, stateService)
       );
+    }
+
+    buildSyncer(metadata: SyncedItemMetadata, stateService: StateService) {
+      const syncer = new SessionSyncer((this as any)[metadata.key], stateService, {
+        key: `${constructor.name}_` + metadata.key,
+        ctor: metadata.ctor,
+        initializer: metadata.initializer,
+      });
+      syncer.init();
+      return syncer;
     }
   };
 }

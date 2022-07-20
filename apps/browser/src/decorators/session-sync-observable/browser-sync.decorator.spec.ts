@@ -5,7 +5,7 @@ import { StateService } from "../../services/abstractions/state.service";
 import { browserSession } from "./browser-sync.decorator";
 import { sessionSync } from "./session-sync.decorator";
 
-// broswerSession initializes SessionSyncers for each sessionSync decorated property
+// browserSession initializes SessionSyncers for each sessionSync decorated property
 // We don't want to test SessionSyncers, so we'll mock them
 jest.mock("./session-syncer");
 
