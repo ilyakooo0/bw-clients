@@ -4,8 +4,9 @@ import { sessionSync } from "./session-sync.decorator";
 
 describe("sessionSync decorator", () => {
   const initializer = (s: string) => "test";
+  const ctor = String;
   class TestClass {
-    @sessionSync({ ctor: String, initializer: initializer })
+    @sessionSync({ ctor: ctor, initializer: initializer })
     testProperty = new Observable<string>();
   }
 
@@ -14,7 +15,7 @@ describe("sessionSync decorator", () => {
     expect((testClass as any).__syncedItemMetadata).toEqual([
       expect.objectContaining({
         key: "testProperty",
-        ctor: String,
+        ctor: ctor,
         initializer: initializer,
       }),
     ]);
