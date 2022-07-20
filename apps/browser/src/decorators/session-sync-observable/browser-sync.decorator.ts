@@ -7,7 +7,7 @@ import { SessionSyncer } from "./session-syncer";
 import { SyncedItemMetadata } from "./sync-item-metadata";
 
 /**
- * Mark the class as syning state across the browser session. This decorator finds rxjs Observable properties
+ * Mark the class as syncing state across the browser session. This decorator finds rxjs Observable properties
  * marked with @sessionSync and syncs these values across the browser session.
  *
  * @param constructor
@@ -25,7 +25,9 @@ export function browserSession<TCtor extends { new (...args: any[]): any }>(cons
       const stateService = args.find((arg) => arg instanceof StateService);
       const messagingService = args.find((arg) => arg instanceof MessagingService);
       if (!stateService || !messagingService) {
-        throw new Error("StateService and MessagingService must be injected");
+        throw new Error(
+          `Cannot decorate ${constructor.name} with browserSession, StateService and MessagingService must be injected`
+        );
       }
 
       if (this.__syncedItemMetadata == null || !(this.__syncedItemMetadata instanceof Array)) {

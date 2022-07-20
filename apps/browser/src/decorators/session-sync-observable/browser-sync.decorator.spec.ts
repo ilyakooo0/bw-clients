@@ -1,4 +1,4 @@
-import { Observable } from "rxjs";
+import { BehaviorSubject } from "rxjs";
 
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 
@@ -7,18 +7,24 @@ import { StateService } from "../../services/abstractions/state.service";
 import { browserSession } from "./browser-sync.decorator";
 import { sessionSync } from "./session-sync.decorator";
 
+// broswerSession initializes SessionSyncers for each sessionSync decorated property
+// We don't want to test SessionSyncers, so we'll mock them
+jest.mock("./session-syncer");
+
 describe("browserSession decorator", () => {
   it("should throw if StateService or MessagingService is not a constructor argument", () => {
     @browserSession
     class TestClass {}
     expect(() => {
       new TestClass();
-    }).toThrowError("StateService and MessagingService must be injected");
+    }).toThrowError(
+      "Cannot decorate TestClass with browserSession, StateService and MessagingService must be injected"
+    );
   });
 
-  it("should create if StateService is a constructor argument", () => {
-    const stateService = Object.create(StateService.prototype, {}) as StateService;
-    const messagingService = Object.create(MessagingService.prototype, {}) as MessagingService;
+  it("should create if StateService and MessagingService are constructor arguments", () => {
+    const stateService = Object.create(StateService.prototype, {});
+    const messagingService = Object.create(MessagingService.prototype, {});
 
     @browserSession
     class TestClass {
@@ -35,9 +41,13 @@ describe("browserSession decorator", () => {
     @browserSession
     class TestClass {
       @sessionSync({ initializer: (s: string) => s })
-      observable = new Observable<string>();
+      behaviorSubject = new BehaviorSubject("");
 
       constructor(private stateService: StateService, messagingService: MessagingService) {}
+
+      fromJSON(json: any) {
+        this.behaviorSubject.next(json);
+      }
     }
 
     beforeEach(() => {
