@@ -13,6 +13,8 @@ import { UserVerificationService } from "@bitwarden/common/abstractions/userVeri
   templateUrl: "delete-account.component.html",
 })
 export class DeleteAccountComponent {
+  formPromise: Promise<void>;
+
   deleteForm = this.formBuilder.group({
     secret: [""],
   });
@@ -27,19 +29,26 @@ export class DeleteAccountComponent {
     private formBuilder: FormBuilder
   ) {}
 
-  async submit() {
-    try {
-      const secret = this.deleteForm.get("secret").value;
-      const verificationRequest = await this.userVerificationService.buildRequest(secret);
-      await this.apiService.deleteAccount(verificationRequest);
-      this.platformUtilsService.showToast(
-        "success",
-        this.i18nService.t("accountDeleted"),
-        this.i18nService.t("accountDeletedDesc")
-      );
-      this.messagingService.send("logout");
-    } catch (e) {
-      this.logService.error(e);
-    }
+  submit() {
+    this.formPromise = (async () => {
+      try {
+        const secret = this.deleteForm.get("secret").value;
+        const verificationRequest = await this.userVerificationService.buildRequest(secret);
+        await this.apiService.deleteAccount(verificationRequest);
+        this.platformUtilsService.showToast(
+          "success",
+          this.i18nService.t("accountDeleted"),
+          this.i18nService.t("accountDeletedDesc")
+        );
+        this.messagingService.send("logout");
+      } catch (e) {
+        this.platformUtilsService.showToast(
+          "error",
+          this.i18nService.t("errorOccurred"),
+          e.message
+        );
+        this.logService.error(e);
+      }
+    })();
   }
 }
