@@ -2,9 +2,9 @@
   <div class="modal-dialog" role="document">
     <form class="modal-content" #form (ngSubmit)="submit()" [formGroup]="deleteForm">
       <div class="modal-body">
-        <p class="modal-text">Proceed below to delete your account and all vault data.</p>
+        <p class="modal-text">{{ "deleteAccountDesc" | i18n }}</p>
         <app-callout type="warning" title="{{ 'warning' | i18n }}">
-          Deleting your account is permanent. It cannot be undone.
+          {{ "deleteAccountWarning" | i18n }}
         </app-callout>
         <div class="box last">
           <div class="box-header">{{ "deleteAccount" | i18n }}</div>
