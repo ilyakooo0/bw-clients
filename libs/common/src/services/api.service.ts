@@ -1,15 +1,15 @@
-import { AppIdService } from "jslib-common/abstractions/appId.service";
-import { OrganizationConnectionType } from "jslib-common/enums/organizationConnectionType";
-import { DeviceRequest } from "jslib-common/models/request/deviceRequest";
-import { TokenRequestTwoFactor } from "jslib-common/models/request/identityToken/tokenRequestTwoFactor";
-import { OrganizationConnectionRequest } from "jslib-common/models/request/organizationConnectionRequest";
-import { BillingHistoryResponse } from "jslib-common/models/response/billingHistoryResponse";
-import { BillingPaymentResponse } from "jslib-common/models/response/billingPaymentResponse";
+import { AppIdService } from "../abstractions/appId.service";
+import { OrganizationConnectionType } from "../enums/organizationConnectionType";
+import { DeviceRequest } from "../models/request/deviceRequest";
+import { TokenRequestTwoFactor } from "../models/request/identityToken/tokenRequestTwoFactor";
+import { OrganizationConnectionRequest } from "../models/request/organizationConnectionRequest";
+import { BillingHistoryResponse } from "../models/response/billingHistoryResponse";
+import { BillingPaymentResponse } from "../models/response/billingPaymentResponse";
 import {
   OrganizationConnectionConfigApis,
   OrganizationConnectionResponse,
-} from "jslib-common/models/response/organizationConnectionResponse";
-import { SsoPreValidateResponse } from "jslib-common/models/response/ssoPreValidateResponse";
+} from "../models/response/organizationConnectionResponse";
+import { SsoPreValidateResponse } from "../models/response/ssoPreValidateResponse";
 
 import { ApiService as ApiServiceAbstraction } from "../abstractions/api.service";
 import { EnvironmentService } from "../abstractions/environment.service";
